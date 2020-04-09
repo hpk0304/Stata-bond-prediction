@@ -8,4 +8,5 @@
 
 ### Data source: 
 .Meyer et. al (2018) with project "200 years of Sovereign Haircuts and Bond Returns", limit 25 single portfolios including 24 countries and 1 global portfolio.
+
 .Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (issuey), maturity date (maturityy), monthly return (rmdreal)
