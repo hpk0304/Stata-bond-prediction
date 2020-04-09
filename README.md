@@ -17,7 +17,7 @@ Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (is
 
 Realization.do: Data Wrangling and EDA (Exploratory Data Analysis), visualize the statistics and distributions of dataset
 
-### 3 methods to find the VaR values, check the outliers and do one-day prediction
+### Three methods to find the VaR values, check the outliers and do one-day prediction
 
 VaR_HistSim_final.do: The first method - Historical Simulation, no assumption about distribution, rolling the historical data in the window of 1 year, 5 years, 20 years, 50 years and 100 years
 
