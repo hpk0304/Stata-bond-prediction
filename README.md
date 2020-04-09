@@ -11,39 +11,26 @@ Meyer et. al (2018) with project "200 years of Sovereign Haircuts and Bond Retur
 
 Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (issuey), maturity date (maturityy), monthly return (rdrealy), amount of issue (amtISS), currency, year y and month m
 
-## EDA (Explore Data Analysis) and Data Wrangling
-#### 1. CONSTRUCT PORTFOLIO RETURNS
+## Information about the files
 
-**Clean the data (details in Realization.do file)**
+**Descriptive statistics and Data Exploration**
 
-**Contruct portfolio by country (Examples)**
-```
-# Weights are calculated by division between the amount of each bond and the total amount of a country
-bys c y m: egen totalweight=sum(amtISSUSD) 
-gen weight_per_bond = amtISSUSD / totalweight
+Realization.do: Data Wrangling and EDA (Exploratory Data Analysis), visualize the statistics and distributions of dataset
 
-# Weighted returns
-gen rmdreal_weighted_bond = rdreal * weight_per_bond 
-gen rydreal_weighted_bond = rdrealy * weight_per_bond 
+**3 methods to find the VaR values, check the outliers and do one-day prediction**
 
-# Portfolio returns
-bys c y m: egen rmdreal = total(rmdreal_weighted_bond), missing 
-bys c y m: egen rydreal= total(rydreal_weighted_bond), missing 
-```
+VaR_HistSim_final.do: The first method - Historical Simulation, no assumption about distribution, rolling the historical data in the window of 1 year, 5 years, 20 years, 50 years and 100 years
 
-**Visualization (Examples)**
-```
-cd"E:\Kiel\Thesis\Estimation\Methodology\Realization\Graphics"	
-histogram rmdreal_sa, normal normopts(lcolor(red)) kdensity kdenopts(lcolor(navy) width(0.001)) name(Monthly_Portfolio)	
-histogram rydreal_sa, normal normopts(lcolor(red)) kdensity kdenopts(lcolor(black) width(0.01)) name(Yearly_Portfolio)
-graph combine Monthly_Portfolio.gph Yearly_Portfolio.gph, xsize(20.000) ysize(10.000) title("Returns")
+VaR_GARCH_final.do: The second method - Generalized Autoregressive Conditional Heteroskedasticity GARCH, applying normality and t-distribution, considering the access kurtosis of loss distribution where losses are probably larger than expectation
 
-quantile rmdreal_sa
-quantile rydreal_sa
-graph combine quantile_monthly.gph quantile_yearly.gph, xsize(20.000) ysize(10.000) title("Quantiles")
+VaR_ES_final.do: The last method - Expected Shortfall or Conditional VaR (CVaR), Average VaR (AVaR) or Expected Tail Loss (ETL ES) implying the expected portfolio return when return exceeds the break of extreme threshold VaR
 
-twoway (tsline rmdreal_sa), xsize(20.000) xlabel(#5,format(%tmCY )) ysize(8.000) ytitle("Monthly Sample Portfolio Return", size(large))
-twoway (tsline rydreal_sa), xsize(20.000) xlabel(#5,format(%tmCY )) ysize(8.000) ytitle("Monthly Sample Portfolio Return", size(large))
+**Back-testing**
+Backtesting_final.do: examining the fitness of those models with the reality by the frequency of violations
 
-save"E:\Kiel\Thesis\Estimation\Methodology\Realization\Realization.dta", replace
-```
+It contains 3 tests:
+a.	Kupiec Test: checking the rate of failure which loss returns exceed the VaR 
+b.	Independence Test: testing the independent violations over the years, no correlation with fluctuation between time t and (t-1)
+c.	Conditional Coverage Test: combination of those above tests, solving the shortcomings of Kupiec test (lack of time correlations) and Independence test (measurement in short-term, lack the rate of loss failures)
+
+
