@@ -15,19 +15,19 @@ Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (is
 
 ### Descriptive statistics and Data Exploration
 
-Realization.do: Data Wrangling and EDA (Exploratory Data Analysis), visualize the statistics and distributions of dataset
+Thesis_Realization.do: Data Wrangling and EDA (Exploratory Data Analysis), visualize the statistics and distributions of dataset
 
 ### Three methods to find the VaR values, check the outliers and do one-day prediction
 
-VaR_HistSim_final.do: The first method - Historical Simulation, no assumption about distribution, rolling the historical data in the window of 1 year, 5 years, 20 years, 50 years and 100 years
+Thesis_VaR_HistSim_final.do: The first method - Historical Simulation, no assumption about distribution, rolling the historical data in the window of 1 year, 5 years, 20 years, 50 years and 100 years
 
-VaR_GARCH_final.do: The second method - Generalized Autoregressive Conditional Heteroskedasticity GARCH, applying normality and t-distribution, considering the access kurtosis of loss distribution where losses are probably larger than expectation
+Thesis_VaR_GARCH_final.do: The second method - Generalized Autoregressive Conditional Heteroskedasticity GARCH, applying normality and t-distribution, considering the access kurtosis of loss distribution where losses are probably larger than expectation
 
-VaR_ES_final.do: The last method - Expected Shortfall or Conditional VaR (CVaR), Average VaR (AVaR) or Expected Tail Loss (ETL ES) implying the expected portfolio return when return exceeds the break of extreme threshold VaR
+Thesis_VaR_ES_final.do: The last method - Expected Shortfall or Conditional VaR (CVaR), Average VaR (AVaR) or Expected Tail Loss (ETL ES) implying the expected portfolio return when return exceeds the break of extreme threshold VaR
 
 ### Back-testing
 
-Backtesting_final.do: examining the fitness of those models with the reality by the frequency of violations
+Thesis_Backtesting_final.do: examining the fitness of those models with the reality by the frequency of violations
 
 It contains 3 tests:
 
