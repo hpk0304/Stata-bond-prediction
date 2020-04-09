@@ -13,11 +13,11 @@ Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (is
 
 ## Information about the files
 
-**Descriptive statistics and Data Exploration**
+### Descriptive statistics and Data Exploration
 
 Realization.do: Data Wrangling and EDA (Exploratory Data Analysis), visualize the statistics and distributions of dataset
 
-**3 methods to find the VaR values, check the outliers and do one-day prediction**
+### 3 methods to find the VaR values, check the outliers and do one-day prediction
 
 VaR_HistSim_final.do: The first method - Historical Simulation, no assumption about distribution, rolling the historical data in the window of 1 year, 5 years, 20 years, 50 years and 100 years
 
@@ -25,7 +25,7 @@ VaR_GARCH_final.do: The second method - Generalized Autoregressive Conditional H
 
 VaR_ES_final.do: The last method - Expected Shortfall or Conditional VaR (CVaR), Average VaR (AVaR) or Expected Tail Loss (ETL ES) implying the expected portfolio return when return exceeds the break of extreme threshold VaR
 
-**Back-testing**
+### Back-testing
 
 Backtesting_final.do: examining the fitness of those models with the reality by the frequency of violations
 
@@ -37,7 +37,7 @@ b.	Independence Test: testing the independent violations over the years, no corr
 
 c.	Conditional Coverage Test: combination of those above tests, solving the shortcomings of Kupiec test (lack of time correlations) and Independence test (measurement in short-term, lack the rate of loss failures)
 
-**Visualization**
+### Visualization
 
 All pictures uploaded support for the estimation
 
