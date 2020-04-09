@@ -13,26 +13,22 @@ Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (is
 
 ## EDA (Explore Data Analysis) and Data Wrangling
 ####CONSTRUCT PORTFOLIO RETURNS
+
 **1. Clean the data
 
-_The target to get the countries to build up the portfolio; therefore, the safe asset should be removed_
-
+'''_The target to get the countries to build up the portfolio; therefore, the safe asset should be removed_
 drop if c=="safe asset" 
-
 format ID %-9.0g
-
 format c %-25s
-
 _Keep the useful variables and delete all irrelevant variables_
 keep c ID tm rdreal rdrealy name desc1 DebtName issuey maturityy amtISS* currency y m 
 
 _label the variables and correct some spelling mistakes in original files
 label var m "month"
-
 label var y "year"
 label var c "country"
 label var rdrealy "Annual Return"
-replace c="NewZealand" if c=="New Zealand"
+replace c="NewZealand" if c=="New Zealand"'''
 
 **Select the countries **
 
