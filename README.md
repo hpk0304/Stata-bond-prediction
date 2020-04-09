@@ -5,3 +5,6 @@
 **Keywords:** Value-at-Risk; Sovereign bond; long-run; Historical Simulation; GARCH(1,1); Expected Shortfall; Back-testing
 
 **Support:** risk management, portfolio optimization
+
+### Data: 
+...Meyer et. al (2018) with project "200 years of Sovereign Haircuts and Bond Returns"
