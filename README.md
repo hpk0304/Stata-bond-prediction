@@ -14,16 +14,18 @@ Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (is
 ## EDA (Explore Data Analysis) and Data Wrangling
 #### 1. CONSTRUCT PORTFOLIO RETURNS
 
-**Clean the data
+**Clean the data**
 
 ```
-_The target to get the countries to build up the portfolio; therefore, the safe asset should be removed_
+# The target to get the countries to build up the portfolio; therefore, the safe asset should be removed_
 drop if c=="safe asset" 
 format ID %-9.0g
 format c %-25s
-_Keep the useful variables and delete all irrelevant variables_
+
+# Keep the useful variables and delete all irrelevant variables_
 keep c ID tm rdreal rdrealy name desc1 DebtName issuey maturityy amtISS* currency y m 
-_label the variables and correct some spelling mistakes in original files
+
+#label the variables and correct some spelling mistakes in original files
 label var m "month"
 label var y "year"
 label var c "country"
@@ -32,53 +34,56 @@ replace c="NewZealand" if c=="New Zealand"
 ```
 **Select the countries **
 
-*_Choose the countries with high frequencies in returns_*
+```
+# Choose the countries with high frequencies in returns
 bysort c: gen freq=_N
 drop if freq < 2496
 
-_Seperate default and not-defaulted_
+# Seperate default and not-defaulted
 gen default=.
 replace default=0 if c=="Australia"|c== "Belgium"|c=="Canada"|c=="New Zealand"| c=="Sweden"
 replace default=1 if default==.
 
-* Annual returns
+# Annual returns
 tsset ID tm
 sort ID tm  
 bys ID y: egen lrdrealy = sum( ln( rdreal + 1 ) )
 replace rdrealy = exp( lrdrealy ) - 1
+```
+**Contruct portfolio by country**
 
-**************************************
-**       PORTFOLIO BY COUNTRY       **
-**************************************
-* Weights
+```
+# Weights are calculated by division between the amount of each bond and the total amount of a country
 bys c y m: egen totalweight=sum(amtISSUSD) 
 gen weight_per_bond = amtISSUSD / totalweight
 
-* Weighted returns
+# Weighted returns
 gen rmdreal_weighted_bond = rdreal * weight_per_bond 
 gen rydreal_weighted_bond = rdrealy * weight_per_bond 
 
-* Portfolio returns
+# Portfolio returns
 bys c y m: egen rmdreal = total(rmdreal_weighted_bond), missing 
 bys c y m: egen rydreal= total(rydreal_weighted_bond), missing 
 
+# Documentation for descriptive analysis
 *cd"E:\Kiel\Thesis\Estimation\Methodology\Realization\Statistics"
 *bys c: asdoc tabstat rmdreal ,  stat(skewness kurtosis) dec(5) save(ske_kur_po)
 *bys c: asdoc summ rmdreal, save(Statistics_po) dec(5) detail 
+```
+**Construct global portfolio**
 
-*************************************
-**       PORTFOLIO BY GLOBAL       **
-*************************************
-* Weights
+```
+# Weights are measured not sorting by country, the same process above
 bys y m: egen totalweight_c = sum(amtISSUSD) 
 gen weight_per_c = amtISSUSD / totalweight_c
 
-* Weighted returns
+# Weighted returns
 gen rmdreal_weighted_c = rdreal * weight_per_c
 gen rydreal_weighted_c = rdrealy * weight_per_c
 bys y m: egen rmdreal_sa = total(rmdreal_weighted_c), missing
 bys y m: egen  rydreal_sa = total(rydreal_weighted_c), missing
 
+# Execute the documentation
 bys c: asdoc tabstat rmdreal,  stat(skewness kurtosis) dec(5) save(ske_kur_po) replace 
 bys c: asdoc summ rmdreal, save(Statistics_po) dec(5) detail replace
 
@@ -90,9 +95,10 @@ label var rmdreal_sa "Monthly Sample Portfolio"
 label var rydreal_sa "Yearly Sample Portfolio"
 label var rmdreal "Monthly Portfolio"
 label var rydreal "Yearly Portfolio"
+```
 
-
-***=======Graphs============
+**Visualization**
+```
 cd"E:\Kiel\Thesis\Estimation\Methodology\Realization\Graphics"	
 histogram rmdreal_sa, normal normopts(lcolor(red)) kdensity kdenopts(lcolor(navy) width(0.001)) name(Monthly_Portfolio)	
 histogram rydreal_sa, normal normopts(lcolor(red)) kdensity kdenopts(lcolor(black) width(0.01)) name(Yearly_Portfolio)
@@ -102,10 +108,8 @@ quantile rmdreal_sa
 quantile rydreal_sa
 graph combine quantile_monthly.gph quantile_yearly.gph, xsize(20.000) ysize(10.000) title("Quantiles")
 
-
 twoway (tsline rmdreal_sa), xsize(20.000) xlabel(#5,format(%tmCY )) ysize(8.000) ytitle("Monthly Sample Portfolio Return", size(large))
 twoway (tsline rydreal_sa), xsize(20.000) xlabel(#5,format(%tmCY )) ysize(8.000) ytitle("Monthly Sample Portfolio Return", size(large))
 
-
-
 save"E:\Kiel\Thesis\Estimation\Methodology\Realization\Realization.dta", replace
+```
