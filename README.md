@@ -26,11 +26,27 @@ VaR_GARCH_final.do: The second method - Generalized Autoregressive Conditional H
 VaR_ES_final.do: The last method - Expected Shortfall or Conditional VaR (CVaR), Average VaR (AVaR) or Expected Tail Loss (ETL ES) implying the expected portfolio return when return exceeds the break of extreme threshold VaR
 
 **Back-testing**
+
 Backtesting_final.do: examining the fitness of those models with the reality by the frequency of violations
 
 It contains 3 tests:
+
 a.	Kupiec Test: checking the rate of failure which loss returns exceed the VaR 
+
 b.	Independence Test: testing the independent violations over the years, no correlation with fluctuation between time t and (t-1)
+
 c.	Conditional Coverage Test: combination of those above tests, solving the shortcomings of Kupiec test (lack of time correlations) and Independence test (measurement in short-term, lack the rate of loss failures)
 
+**Visualization**
 
+All pictures uploaded support for the estimation
+
+## Results and conclusion:
+
+First of all, monthly realized returns of long-term Sovereign bond data are asymmetry, high peaks and fat tails. In other word, real returns do not distribute normally even in long run
+
+Secondly, instead of applying same percentage for all portfolios, the proportions constructed in the paper have many benefits; for instance, accurately reflecting the monthly actual rates of each national portfolio in total of 25 selected categories. 
+
+In summary, traditional methods including **Historical Simulation and Normal GARCH(1,1)** are applicable in long run Sovereign bond data from perspective of Back-testing. Importantly, there is **no persistent model** that can be used throughout the periods, highly recommended to consider the estimation in the stable periods and crisis separately.
+
+__Future research:**__ GARCH model needs to be reviewed carefully before application because the biggest concern is the direction of realized returns. With the idea of regressing VaR model by squared deviation and past returns, GARCH model could be combined directly with the realized returns or with Historical Simulation
