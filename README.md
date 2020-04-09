@@ -41,7 +41,7 @@ c.	Conditional Coverage Test: combination of those above tests, solving the shor
 
 All pictures uploaded support for the estimation
 
-## Results and conclusion:
+## Results and conclusions
 
 First of all, monthly realized returns of long-term Sovereign bond data are asymmetry, high peaks and fat tails. In other word, real returns do not distribute normally even in long run
 
