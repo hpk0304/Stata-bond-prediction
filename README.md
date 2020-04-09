@@ -7,34 +7,37 @@ In the face of current chaos in finance, risk management is an urgent requiremen
 **Support:** risk management, portfolio optimization
 
 ### Data source: 
-Meyer et. al (2018) with project "200 years of Sovereign Haircuts and Bond Returns", limit 25 single portfolios including 24 countries and 1 global portfolio.
+Meyer et. al (2018) with project "200 years of Sovereign Haircuts and Bond Returns", solve 25/91 single portfolios
 
-Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (issuey), maturity date (maturityy), monthly return (rmdreal)
+Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (issuey), maturity date (maturityy), monthly return (rdrealy), amount of issue (amtISS), currency, year y and month m
 
 ## EDA (Explore Data Analysis) and Data Wrangling
 clear
 use "E:\Kiel\Thesis\Estimation\master sample stat13_Origin.dta"
 
-*=========================================================
-*============= CONSTRUCT PORTFOLIO RETURNS ===============
-*=========================================================
-drop if c=="safe asset"
+####CONSTRUCT PORTFOLIO RETURNS
+**Clean the data
+
+_The target to get the countries to build up the portfolio; therefore, the safe asset should be removed_
+drop if c=="safe asset" 
 format ID %-9.0g
 format c %-25s
+_Keep the useful variables and delete all irrelevant variables_
 keep c ID tm rdreal rdrealy name desc1 DebtName issuey maturityy amtISS* currency y m 
+_label the variables and correct some spelling mistakes in original files
 label var m "month"
 label var y "year"
 label var c "country"
 label var rdrealy "Annual Return"
 replace c="NewZealand" if c=="New Zealand"
 
-**********************************
-**       SELECT COUNTRIES       **
-**********************************
+**Select the countries **
+
+*_Choose the countries with high frequencies in returns_*
 bysort c: gen freq=_N
 drop if freq < 2496
 
-*Seperate default and not-defaulted
+_Seperate default and not-defaulted_
 gen default=.
 replace default=0 if c=="Australia"|c== "Belgium"|c=="Canada"|c=="New Zealand"| c=="Sweden"
 replace default=1 if default==.
