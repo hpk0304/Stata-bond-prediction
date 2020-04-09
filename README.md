@@ -14,44 +14,9 @@ Excel and Stata files contain the bondId (ID), Name, Country (c), issue date (is
 ## EDA (Explore Data Analysis) and Data Wrangling
 #### 1. CONSTRUCT PORTFOLIO RETURNS
 
-**Clean the data**
+**Clean the data (details in Realization.do file)**
 
-```
-# The target to get the countries to build up the portfolio; therefore, the safe asset should be removed_
-drop if c=="safe asset" 
-format ID %-9.0g
-format c %-25s
-
-# Keep the useful variables and delete all irrelevant variables_
-keep c ID tm rdreal rdrealy name desc1 DebtName issuey maturityy amtISS* currency y m 
-
-#label the variables and correct some spelling mistakes in original files
-label var m "month"
-label var y "year"
-label var c "country"
-label var rdrealy "Annual Return"
-replace c="NewZealand" if c=="New Zealand"
-```
-**Select the countries **
-
-```
-# Choose the countries with high frequencies in returns
-bysort c: gen freq=_N
-drop if freq < 2496
-
-# Seperate default and not-defaulted
-gen default=.
-replace default=0 if c=="Australia"|c== "Belgium"|c=="Canada"|c=="New Zealand"| c=="Sweden"
-replace default=1 if default==.
-
-# Annual returns
-tsset ID tm
-sort ID tm  
-bys ID y: egen lrdrealy = sum( ln( rdreal + 1 ) )
-replace rdrealy = exp( lrdrealy ) - 1
-```
-**Contruct portfolio by country**
-
+**Contruct portfolio by country (Examples)**
 ```
 # Weights are calculated by division between the amount of each bond and the total amount of a country
 bys c y m: egen totalweight=sum(amtISSUSD) 
@@ -64,40 +29,9 @@ gen rydreal_weighted_bond = rdrealy * weight_per_bond
 # Portfolio returns
 bys c y m: egen rmdreal = total(rmdreal_weighted_bond), missing 
 bys c y m: egen rydreal= total(rydreal_weighted_bond), missing 
-
-# Documentation for descriptive analysis
-*cd"E:\Kiel\Thesis\Estimation\Methodology\Realization\Statistics"
-*bys c: asdoc tabstat rmdreal ,  stat(skewness kurtosis) dec(5) save(ske_kur_po)
-*bys c: asdoc summ rmdreal, save(Statistics_po) dec(5) detail 
-```
-**Construct global portfolio**
-
-```
-# Weights are measured not sorting by country, the same process above
-bys y m: egen totalweight_c = sum(amtISSUSD) 
-gen weight_per_c = amtISSUSD / totalweight_c
-
-# Weighted returns
-gen rmdreal_weighted_c = rdreal * weight_per_c
-gen rydreal_weighted_c = rdrealy * weight_per_c
-bys y m: egen rmdreal_sa = total(rmdreal_weighted_c), missing
-bys y m: egen  rydreal_sa = total(rydreal_weighted_c), missing
-
-# Execute the documentation
-bys c: asdoc tabstat rmdreal,  stat(skewness kurtosis) dec(5) save(ske_kur_po) replace 
-bys c: asdoc summ rmdreal, save(Statistics_po) dec(5) detail replace
-
-*cd"E:\Kiel\Thesis\Estimation\Methodology\Realization\Statistics"
-*asdoc tabstat rmdreal_sa rydreal_sa,  stat(skewness kurtosis) dec(5) save(ske_kur_sapo) replace 
-*asdoc summ rmdreal_sa rydreal_sa, save(Statistics_sapo) dec(5) detail replace
-
-label var rmdreal_sa "Monthly Sample Portfolio"
-label var rydreal_sa "Yearly Sample Portfolio"
-label var rmdreal "Monthly Portfolio"
-label var rydreal "Yearly Portfolio"
 ```
 
-**Visualization**
+**Visualization (Examples)**
 ```
 cd"E:\Kiel\Thesis\Estimation\Methodology\Realization\Graphics"	
 histogram rmdreal_sa, normal normopts(lcolor(red)) kdensity kdenopts(lcolor(navy) width(0.001)) name(Monthly_Portfolio)	
