@@ -39,7 +39,7 @@ c.	Conditional Coverage Test: combination of those above tests, solving the shor
 
 ### Visualization
 
-All pictures uploaded support for the estimation
+All pictures uploaded support for the estimation and conclusions.
 
 ## Results and conclusions
 
